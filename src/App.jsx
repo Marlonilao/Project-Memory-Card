@@ -3,12 +3,12 @@ import { MantineProvider, Container, Notification, Text } from '@mantine/core'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Header from './components/Header'
+import GameGrid from './components/GameGrid'
 
 function App() {
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(0)
   const [clickedCards, setClickedCards] = useState([])
-  const [cards, setCards] = useState([])
   const [pokemons, setPokemons] = useState([])
 
   useEffect(() => {
@@ -50,6 +50,7 @@ function App() {
             the same card twice resets your score
           </Text>
         </Notification>
+        <GameGrid pokemons={pokemons} />
       </Container>
     </MantineProvider>
   )
