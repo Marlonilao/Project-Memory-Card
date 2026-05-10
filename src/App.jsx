@@ -9,6 +9,8 @@ import {
   Stack,
   Box,
   Alert,
+  Loader,
+  Center,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useState, useEffect } from 'react'
@@ -166,7 +168,15 @@ function App() {
               Clicking the same card twice resets your score.
             </Text>
           </Alert>
-          <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
+          <>
+            {pokemons.length > 0 ? (
+              <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
+            ) : (
+              <Center mt='xl'>
+                <Loader color='#f5c518' />
+              </Center>
+            )}
+          </>
         </Container>
         <Footer />
       </Box>
