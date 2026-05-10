@@ -17,6 +17,8 @@ import Header from './components/Header'
 import GameGrid from './components/GameGrid'
 import { IconInfoCircle } from '@tabler/icons-react'
 import Footer from './components/Footer'
+import { notifications, Notifications } from '@mantine/notifications'
+import '@mantine/notifications/styles.css'
 
 function App() {
   const [score, setScore] = useState(0)
@@ -59,6 +61,12 @@ function App() {
 
   const handleCardClick = (pokemon) => {
     if (clickedCards.includes(pokemon.name)) {
+      notifications.show({
+        message: `Oops! You already clicked ${pokemon.name}!`,
+        position: 'top-center',
+        color: 'red',
+        autoClose: 3000,
+      })
       resetGame()
       if (score > bestScore) {
         setBestScore(score)
@@ -125,6 +133,7 @@ function App() {
             </Button>
           </Stack>
         </Modal>
+        <Notifications />
         <Container bg='#16213e' p='xl' style={{ borderRadius: '12px' }}>
           <Header score={score} bestScore={bestScore} />
           <Alert
