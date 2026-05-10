@@ -28,13 +28,29 @@ function App() {
   const [opened, { open, close }] = useDisclosure(false)
 
   useEffect(() => {
+    function pickRandom(array, count) {
+      const result = []
+      const used = new Set()
+
+      while (result.length < count) {
+        const index = Math.floor(Math.random() * array.length)
+        if (!used.has(index)) {
+          used.add(index)
+          result.push(array[index])
+        }
+      }
+      return result
+    }
+
     const fetchPokemons = async () => {
       const response = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/?limit=12/',
+        'https://pokeapi.co/api/v2/pokemon/?limit=50/',
       )
 
+      const chosenPokemons = pickRandom(response.data.results, 12)
+
       const pokemonsWithSprites = await Promise.all(
-        response.data.results.map(async (pokemon) => {
+        chosenPokemons.map(async (pokemon) => {
           const pokemonData = await axios.get(pokemon.url)
           return {
             ...pokemon,
