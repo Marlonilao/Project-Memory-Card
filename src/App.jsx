@@ -101,6 +101,7 @@ function App() {
   const resetGame = () => {
     setScore(0)
     setClickedCards([])
+    setPokemons(shuffleArray(pickRandom(pokemonPool, 12)))
   }
 
   const handlePlayAgain = () => {
@@ -160,7 +161,7 @@ function App() {
           >
             <Text size='xs' c='white'>
               Click every card once — the cards shuffle after each click.
-              Clicking the same card twice resets your score.
+              Clicking the same card twice resets the cards and your score.
             </Text>
           </Alert>
           <>
