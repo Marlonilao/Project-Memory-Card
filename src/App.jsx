@@ -32,20 +32,9 @@ function App() {
   const [opened, { open, close }] = useDisclosure(false)
   const [difficulty, setDifficulty] = useState('Easy')
 
-  let numberOfPokemons
-
-  switch (difficulty) {
-    case 'Easy':
-      numberOfPokemons = 12
-      break
-    case 'Medium':
-      numberOfPokemons = 18
-      break
-    case 'Hard':
-      numberOfPokemons = 24
-      break
-    default:
-      numberOfPokemons = 12
+  const getNumberOfPokemons = (diff) => {
+    const map = { Easy: 12, Medium: 18, Hard: 24 }
+    return map[diff] ?? 12
   }
 
   useEffect(() => {
@@ -82,7 +71,8 @@ function App() {
 
       setPokemonPool(pokemonsWithSprites)
 
-      const chosenPokemons = pickRandom(pokemonsWithSprites, numberOfPokemons)
+      const count = getNumberOfPokemons(difficulty)
+      const chosenPokemons = pickRandom(pokemonsWithSprites, count)
 
       setPokemons(shuffleArray(chosenPokemons))
     }
@@ -115,10 +105,11 @@ function App() {
     }
   }
 
-  const resetGame = () => {
+  const resetGame = (difficultyOverride) => {
+    const count = getNumberOfPokemons(difficultyOverride ?? difficulty)
     setScore(0)
     setClickedCards([])
-    setPokemons(shuffleArray(pickRandom(pokemonPool, numberOfPokemons)))
+    setPokemons(shuffleArray(pickRandom(pokemonPool, count)))
   }
 
   const handlePlayAgain = () => {
@@ -128,7 +119,7 @@ function App() {
 
   const handleDifficultyChange = (value) => {
     setDifficulty(value)
-    resetGame()
+    resetGame(value)
   }
 
   return (
