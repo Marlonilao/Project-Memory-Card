@@ -21,6 +21,7 @@ import { IconInfoCircle } from '@tabler/icons-react'
 import Footer from './components/Footer'
 import { notifications, Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
+import { pickRandom, shuffleArray } from './utils/helperFunctions'
 
 function App() {
   const [score, setScore] = useState(0)
@@ -31,23 +32,9 @@ function App() {
   const [opened, { open, close }] = useDisclosure(false)
 
   useEffect(() => {
-    function pickRandom(array, count) {
-      const result = []
-      const used = new Set()
-
-      while (result.length < count) {
-        const index = Math.floor(Math.random() * array.length)
-        if (!used.has(index)) {
-          used.add(index)
-          result.push(array[index])
-        }
-      }
-      return result
-    }
-
     const fetchPokemons = async () => {
       const response = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/?limit=1000/',
+        'https://pokeapi.co/api/v2/pokemon/?limit=500/',
       )
 
       const pokemonsWithSprites = await Promise.all(
@@ -68,17 +55,6 @@ function App() {
     }
     fetchPokemons()
   }, [])
-
-  function shuffleArray(array) {
-    const shuffled = [...array] // create a shallow copy to avoid mutating state
-
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]] // swap elements
-    }
-
-    return shuffled
-  }
 
   const handleCardClick = (pokemon) => {
     if (clickedCards.includes(pokemon.name)) {
