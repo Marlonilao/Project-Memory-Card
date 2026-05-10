@@ -26,6 +26,7 @@ function App() {
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(0)
   const [clickedCards, setClickedCards] = useState([])
+  const [pokemonPool, setPokemonPool] = useState([])
   const [pokemons, setPokemons] = useState([])
   const [opened, { open, close }] = useDisclosure(false)
 
@@ -46,13 +47,11 @@ function App() {
 
     const fetchPokemons = async () => {
       const response = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/?limit=50/',
+        'https://pokeapi.co/api/v2/pokemon/?limit=1000/',
       )
 
-      const chosenPokemons = pickRandom(response.data.results, 12)
-
       const pokemonsWithSprites = await Promise.all(
-        chosenPokemons.map(async (pokemon) => {
+        response.data.results.map(async (pokemon) => {
           const pokemonData = await axios.get(pokemon.url)
           return {
             ...pokemon,
@@ -61,7 +60,11 @@ function App() {
         }),
       )
 
-      setPokemons(shuffleArray(pokemonsWithSprites))
+      setPokemonPool(pokemonsWithSprites)
+
+      const chosenPokemons = pickRandom(pokemonsWithSprites, 12)
+
+      setPokemons(shuffleArray(chosenPokemons))
     }
     fetchPokemons()
   }, [])
