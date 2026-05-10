@@ -133,7 +133,15 @@ function App() {
 
   return (
     <MantineProvider>
-      <Box bg='#1a1a2e' mih='100vh' p='xl'>
+      <Box
+        bg='#1a1a2e'
+        mih='100vh'
+        p='xl'
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Modal
           opened={opened}
           onClose={close}
@@ -170,7 +178,11 @@ function App() {
           </Stack>
         </Modal>
         <Notifications />
-        <Container bg='#16213e' p='xl' style={{ borderRadius: '12px' }}>
+        <Container
+          bg='#16213e'
+          p='xl'
+          style={{ borderRadius: '12px', flex: 1 }}
+        >
           <Header
             score={score}
             bestScore={bestScore}
