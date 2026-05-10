@@ -55,7 +55,7 @@ function App() {
         )
       } else {
         const response = await axios.get(
-          'https://pokeapi.co/api/v2/pokemon/?limit=500/',
+          'https://pokeapi.co/api/v2/pokemon/?limit=1350/',
         )
         localStorage.setItem('pokemons_', JSON.stringify(response.data.results))
         pokemonsWithSprites = await Promise.all(
