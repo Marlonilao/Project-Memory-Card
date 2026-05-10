@@ -16,6 +16,7 @@ import axios from 'axios'
 import Header from './components/Header'
 import GameGrid from './components/GameGrid'
 import { IconInfoCircle } from '@tabler/icons-react'
+import Footer from './components/Footer'
 
 function App() {
   const [score, setScore] = useState(0)
@@ -142,6 +143,7 @@ function App() {
           </Alert>
           <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
         </Container>
+        <Footer />
       </Box>
     </MantineProvider>
   )
