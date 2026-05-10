@@ -33,19 +33,35 @@ function App() {
 
   useEffect(() => {
     const fetchPokemons = async () => {
-      const response = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/?limit=500/',
-      )
+      let pokemonsWithSprites
 
-      const pokemonsWithSprites = await Promise.all(
-        response.data.results.map(async (pokemon) => {
-          const pokemonData = await axios.get(pokemon.url)
-          return {
-            ...pokemon,
-            sprite: pokemonData.data.sprites.front_default.toString(),
-          }
-        }),
-      )
+      const cached = localStorage.getItem('pokemons_')
+
+      if (cached) {
+        pokemonsWithSprites = await Promise.all(
+          JSON.parse(cached).map(async (pokemon) => {
+            const pokemonData = await axios.get(pokemon.url)
+            return {
+              ...pokemon,
+              sprite: pokemonData.data.sprites.front_default.toString(),
+            }
+          }),
+        )
+      } else {
+        const response = await axios.get(
+          'https://pokeapi.co/api/v2/pokemon/?limit=500/',
+        )
+        localStorage.setItem('pokemons_', JSON.stringify(response.data.results))
+        pokemonsWithSprites = await Promise.all(
+          response.data.results.map(async (pokemon) => {
+            const pokemonData = await axios.get(pokemon.url)
+            return {
+              ...pokemon,
+              sprite: pokemonData.data.sprites.front_default.toString(),
+            }
+          }),
+        )
+      }
 
       setPokemonPool(pokemonsWithSprites)
 
