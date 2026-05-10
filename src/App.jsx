@@ -190,8 +190,8 @@ function App() {
             }}
           >
             <Text size='xs' c='white'>
-              Click every card once — the cards shuffle after each click.
-              Clicking the same card twice resets the cards and your score.
+              Click every Pokémon once — they shuffle after each click. Clicking
+              the same Pokémon twice resets them and your score.
             </Text>
           </Alert>
           <>

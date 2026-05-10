@@ -12,10 +12,10 @@ const Header = (props) => {
         wrap='wrap'
       >
         <Title order={1} c='#f5c518'>
-          Memory Card Game
+          Pokémon Memory
         </Title>
         <Text size='sm' c='#ffffff'>
-          Click each card only once — don't repeat!
+          Click each Pokémon only once — don't repeat!
         </Text>
       </Flex>
       <Select
@@ -45,9 +45,7 @@ const Header = (props) => {
             border: '1px solid #533483',
           },
           option: {
-            color: '#ffffff',
-          },
-          option: {
+            color: '#ffffff', // ✅
             '&[dataSelected]': {
               backgroundColor: '#533483',
             },
