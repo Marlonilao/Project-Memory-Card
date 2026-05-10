@@ -1,4 +1,4 @@
-import { Group, Flex, Title, Text, Box } from '@mantine/core'
+import { Group, Flex, Title, Text, Box, Select } from '@mantine/core'
 
 const Header = (props) => {
   return (
@@ -18,6 +18,42 @@ const Header = (props) => {
           Click each card only once — don't repeat!
         </Text>
       </Flex>
+      <Select
+        label='Difficulty'
+        data={['Easy', 'Medium', 'Hard']}
+        defaultValue='Easy'
+        value={props.difficulty}
+        onChange={props.onDifficultyChange}
+        styles={{
+          label: {
+            color: '#ffffff',
+            textTransform: 'uppercase',
+            fontSize: '12px',
+            textAlign: 'center',
+            marginBottom: '4px',
+          },
+          input: {
+            backgroundColor: '#0d1b4b',
+            border: '1px solid #533483',
+            borderRadius: '8px',
+            color: '#ffffff',
+            textAlign: 'center',
+            minWidth: '80px',
+          },
+          dropdown: {
+            backgroundColor: '#0d1b4b',
+            border: '1px solid #533483',
+          },
+          option: {
+            color: '#ffffff',
+          },
+          option: {
+            '&[dataSelected]': {
+              backgroundColor: '#533483',
+            },
+          },
+        }}
+      />
       <Group>
         <Box
           p='sm'

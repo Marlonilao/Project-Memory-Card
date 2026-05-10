@@ -30,6 +30,23 @@ function App() {
   const [pokemonPool, setPokemonPool] = useState([])
   const [pokemons, setPokemons] = useState([])
   const [opened, { open, close }] = useDisclosure(false)
+  const [difficulty, setDifficulty] = useState('Easy')
+
+  let numberOfPokemons
+
+  switch (difficulty) {
+    case 'Easy':
+      numberOfPokemons = 12
+      break
+    case 'Medium':
+      numberOfPokemons = 18
+      break
+    case 'Hard':
+      numberOfPokemons = 24
+      break
+    default:
+      numberOfPokemons = 12
+  }
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -65,7 +82,7 @@ function App() {
 
       setPokemonPool(pokemonsWithSprites)
 
-      const chosenPokemons = pickRandom(pokemonsWithSprites, 12)
+      const chosenPokemons = pickRandom(pokemonsWithSprites, numberOfPokemons)
 
       setPokemons(shuffleArray(chosenPokemons))
     }
@@ -101,11 +118,16 @@ function App() {
   const resetGame = () => {
     setScore(0)
     setClickedCards([])
-    setPokemons(shuffleArray(pickRandom(pokemonPool, 12)))
+    setPokemons(shuffleArray(pickRandom(pokemonPool, numberOfPokemons)))
   }
 
   const handlePlayAgain = () => {
     close()
+    resetGame()
+  }
+
+  const handleDifficultyChange = (value) => {
+    setDifficulty(value)
     resetGame()
   }
 
@@ -149,7 +171,12 @@ function App() {
         </Modal>
         <Notifications />
         <Container bg='#16213e' p='xl' style={{ borderRadius: '12px' }}>
-          <Header score={score} bestScore={bestScore} />
+          <Header
+            score={score}
+            bestScore={bestScore}
+            difficulty={difficulty}
+            onDifficultyChange={handleDifficultyChange}
+          />
           <Alert
             icon={<IconInfoCircle size={18} />}
             mt='md'
