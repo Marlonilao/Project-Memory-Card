@@ -10,6 +10,8 @@ function App() {
   const [bestScore, setBestScore] = useState(0)
   const [clickedCards, setClickedCards] = useState([])
   const [pokemons, setPokemons] = useState([])
+  const [gameOver, setGameOver] = useState(false)
+  const [youWin, setYouWin] = useState(false)
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -33,10 +35,45 @@ function App() {
     fetchPokemons()
   }, [])
 
+  function shuffleArray(array) {
+    const shuffled = [...array] // create a shallow copy to avoid mutating state
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]] // swap elements
+    }
+
+    return shuffled
+  }
+
+  const handleCardClick = (pokemon) => {
+    if (clickedCards.includes(pokemon.name)) {
+      setScore(0)
+      setClickedCards([])
+      setGameOver(true)
+      if (score > bestScore) {
+        setBestScore(score)
+      }
+      return
+    } else {
+      if (score + 1 === pokemons.length) {
+        setYouWin(true)
+        console.log('You win!')
+        setBestScore(score + 1)
+        setScore(0)
+        setClickedCards([])
+        return
+      }
+      setClickedCards([...clickedCards, pokemon.name])
+      setScore(score + 1)
+      setPokemons((prev) => shuffleArray(prev))
+    }
+  }
+
   return (
     <MantineProvider>
       <Container>
-        <Header score={0} bestScore={0} />
+        <Header score={score} bestScore={bestScore} />
         <Notification
           withCloseButton={false}
           withBorder
@@ -50,7 +87,7 @@ function App() {
             the same card twice resets your score
           </Text>
         </Notification>
-        <GameGrid pokemons={pokemons} />
+        <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
       </Container>
     </MantineProvider>
   )

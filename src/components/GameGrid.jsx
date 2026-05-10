@@ -7,7 +7,10 @@ const GameGrid = (props) => {
       {props.pokemons.map((pokemon) => (
         <Grid.Col span={3} key={pokemon.name}>
           <Card withBorder radius='md' className={classes.card}>
-            <UnstyledButton w='100%'>
+            <UnstyledButton
+              w='100%'
+              onClick={() => props.handleCardClick(pokemon)}
+            >
               <Image radius='md' src={pokemon.sprite} />
             </UnstyledButton>
           </Card>
