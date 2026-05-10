@@ -11,19 +11,41 @@ const Header = (props) => {
         direction='column'
         wrap='wrap'
       >
-        <Title order={1}>Memory Card Game</Title>
-        <Text size='sm'>Click each card only once — don't repeat!</Text>
+        <Title order={1} c='#f5c518'>
+          Memory Card Game
+        </Title>
+        <Text size='sm' c='#ffffff'>
+          Click each card only once — don't repeat!
+        </Text>
       </Flex>
       <Group>
-        <Box>
-          <Text size='sm'>Score</Text>
-          <Text size='lg' weight={700}>
+        <Box
+          p='sm'
+          style={{
+            border: '1px solid #533483',
+            borderRadius: '8px',
+            minWidth: '80px',
+          }}
+        >
+          <Text size='sm' ta='center' c='#ffffff' tt='uppercase'>
+            Score
+          </Text>
+          <Text size='lg' ta='center' c='#ffffff' tt='uppercase' fw={700}>
             {props.score}
           </Text>
         </Box>
-        <Box>
-          <Text size='sm'>Best</Text>
-          <Text size='lg' weight={700}>
+        <Box
+          p='sm'
+          style={{
+            border: '1px solid #533483',
+            borderRadius: '8px',
+            minWidth: '80px',
+          }}
+        >
+          <Text size='sm' ta='center' c='#ffffff' tt='uppercase'>
+            Best
+          </Text>
+          <Text size='lg' ta='center' c='#f5c518' tt='uppercase' fw={700}>
             {props.bestScore}
           </Text>
         </Box>

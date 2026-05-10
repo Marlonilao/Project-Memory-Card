@@ -7,12 +7,15 @@ import {
   Modal,
   Button,
   Stack,
+  Box,
+  Alert,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Header from './components/Header'
 import GameGrid from './components/GameGrid'
+import { IconInfoCircle } from '@tabler/icons-react'
 
 function App() {
   const [score, setScore] = useState(0)
@@ -37,8 +40,7 @@ function App() {
         }),
       )
 
-      setPokemons(pokemonsWithSprites)
-      console.log(pokemonsWithSprites)
+      setPokemons(shuffleArray(pokemonsWithSprites))
     }
     fetchPokemons()
   }, [])
@@ -86,34 +88,61 @@ function App() {
 
   return (
     <MantineProvider>
-      <Modal opened={opened} onClose={close} withCloseButton={false}>
-        <Stack>
-          <Text size='xl' ta='center'>
-            🎉 You Won!
-          </Text>
-          <Text size='md' ta='center'>
-            You clicked each cards only once!
-          </Text>
-          <Button onClick={handlePlayAgain}>Play Again</Button>
-        </Stack>
-      </Modal>
-      <Container>
-        <Header score={score} bestScore={bestScore} />
-        <Notification
+      <Box bg='#1a1a2e' mih='100vh' p='xl'>
+        <Modal
+          opened={opened}
+          onClose={close}
           withCloseButton={false}
-          withBorder
-          color='grape'
-          mt='md'
-          bg='grape.0'
-          radius='md'
+          centered
+          styles={{
+            content: {
+              backgroundColor: '#16213e',
+              border: '1px solid #533483',
+            },
+            overlay: { backgroundColor: 'rgba(26, 26, 46, 0.85)' },
+          }}
         >
-          <Text size='xs' c='grape'>
-            Click every card once — the cards shuffle after each click. Clicking
-            the same card twice resets your score
-          </Text>
-        </Notification>
-        <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
-      </Container>
+          <Stack align='center' gap='sm' p='md'>
+            <Text size='40px'>🎉</Text>
+            <Text size='xl' fw={700} c='#f5c518' ta='center'>
+              You Won!
+            </Text>
+            <Text size='sm' c='dimmed' ta='center' c='gray.4'>
+              You clicked each card only once!
+            </Text>
+            <Button
+              onClick={handlePlayAgain}
+              fullWidth
+              mt='md'
+              style={{
+                backgroundColor: '#f5c518',
+                color: '#1a1a2e',
+                fontWeight: 700,
+              }}
+            >
+              Play Again
+            </Button>
+          </Stack>
+        </Modal>
+        <Container bg='#16213e' p='xl' style={{ borderRadius: '12px' }}>
+          <Header score={score} bestScore={bestScore} />
+          <Alert
+            icon={<IconInfoCircle size={18} />}
+            mt='md'
+            radius='md'
+            style={{
+              backgroundColor: '#16213e',
+              border: '1px solid #533483',
+            }}
+          >
+            <Text size='xs' c='white'>
+              Click every card once — the cards shuffle after each click.
+              Clicking the same card twice resets your score.
+            </Text>
+          </Alert>
+          <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
+        </Container>
+      </Box>
     </MantineProvider>
   )
 }
