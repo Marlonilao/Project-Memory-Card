@@ -39,13 +39,13 @@ function App() {
   const pokemonPoolRef = useRef([])
 
   const [playGoodClick] = useSound('/up-chime-1.mp3', {
-    volume: 0.5,
+    volume: 0.1,
   })
 
   const [playBadClick] = useSound('/dats-wrong.wav')
 
   const [playGoodJob] = useSound('/good-job.wav', {
-    volume: 0.5,
+    volume: 0.1,
   })
 
   useEffect(() => {
@@ -161,11 +161,7 @@ function App() {
           </Stack>
         </Modal>
         <Notifications />
-        <Container
-          bg='#16213e'
-          p='xl'
-          style={{ borderRadius: '12px', flex: 1 }}
-        >
+        <Container bg='#16213e' p='xl' style={{ borderRadius: '12px' }}>
           <Header
             score={score}
             bestScore={bestScore}
@@ -196,7 +192,9 @@ function App() {
             )}
           </>
         </Container>
-        <Footer />
+        <Box mt='auto'>
+          <Footer />
+        </Box>
       </Box>
     </MantineProvider>
   )
