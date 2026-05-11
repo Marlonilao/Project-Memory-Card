@@ -55,7 +55,8 @@ function App() {
             const pokemonData = await axios.get(pokemon.url)
             return {
               ...pokemon,
-              sprite: pokemonData.data.sprites.front_default.toString(),
+              sprite:
+                pokemonData.data.sprites.front_default?.toString() ?? null,
             }
           }),
         )
