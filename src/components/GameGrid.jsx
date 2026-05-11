@@ -9,7 +9,7 @@ const GameGrid = (props) => {
         const sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
 
         return (
-          <Grid.Col span={2} key={pokemon.name}>
+          <Grid.Col span={{ base: 6, sm: 2 }} key={pokemon.name}>
             <Card withBorder radius='md' className={classes.card}>
               <UnstyledButton
                 w='100%'
