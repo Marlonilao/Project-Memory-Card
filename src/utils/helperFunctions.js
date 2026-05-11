@@ -22,3 +22,8 @@ export function shuffleArray(array) {
 
   return shuffled
 }
+
+export const getNumberOfPokemons = (diff) => {
+  const map = { Easy: 12, Medium: 18, Hard: 24 }
+  return map[diff] ?? 12
+}

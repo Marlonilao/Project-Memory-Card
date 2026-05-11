@@ -20,21 +20,23 @@ const GameGrid = (props) => {
 
   return props.pokemons ? (
     <Grid gap='xs' mt='xl'>
-      {props.pokemons.map((pokemon) => (
-        <Grid.Col span={colspan} key={pokemon.name}>
-          <Card withBorder radius='md' className={classes.card}>
-            <UnstyledButton
-              w='100%'
-              onClick={() => props.handleCardClick(pokemon)}
-            >
-              {pokemon.sprite && (
-                <img src={pokemon.sprite} alt={pokemon.name} />
-              )}
-              {/* <Image radius='md' src={pokemon.sprite} /> */}
-            </UnstyledButton>
-          </Card>
-        </Grid.Col>
-      ))}
+      {props.pokemons.map((pokemon) => {
+        const id = pokemon.url.split('/').filter(Boolean).pop()
+        const sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+
+        return (
+          <Grid.Col span={colspan} key={pokemon.name}>
+            <Card withBorder radius='md' className={classes.card}>
+              <UnstyledButton
+                w='100%'
+                onClick={() => props.handleCardClick(pokemon)}
+              >
+                <img src={sprite} alt={pokemon.name} />
+              </UnstyledButton>
+            </Card>
+          </Grid.Col>
+        )
+      })}
     </Grid>
   ) : null
 }

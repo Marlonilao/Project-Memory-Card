@@ -2,7 +2,6 @@ import '@mantine/core/styles.css'
 import {
   MantineProvider,
   Container,
-  Notification,
   Text,
   Modal,
   Button,
@@ -13,7 +12,7 @@ import {
   Center,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Header from './components/Header'
 import GameGrid from './components/GameGrid'
@@ -21,42 +20,32 @@ import { IconInfoCircle } from '@tabler/icons-react'
 import Footer from './components/Footer'
 import { notifications, Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
-import { pickRandom, shuffleArray } from './utils/helperFunctions'
+import {
+  pickRandom,
+  shuffleArray,
+  getNumberOfPokemons,
+} from './utils/helperFunctions'
 
 function App() {
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(0)
   const [clickedCards, setClickedCards] = useState([])
-  const [pokemonPool, setPokemonPool] = useState([])
   const [pokemons, setPokemons] = useState([])
   const [opened, { open, close }] = useDisclosure(false)
   const [difficulty, setDifficulty] = useState('Easy')
 
-  const getNumberOfPokemons = (diff) => {
-    const map = { Easy: 12, Medium: 18, Hard: 24 }
-    return map[diff] ?? 12
-  }
+  const pokemonPoolRef = useRef([])
 
   useEffect(() => {
     const fetchPokemons = async () => {
       const response = await axios.get(
         'https://pokeapi.co/api/v2/pokemon/?limit=1350/',
       )
-
-      const pokemonsWithSprites = await Promise.all(
-        response.data.results.map(async (pokemon) => {
-          const pokemonData = await axios.get(pokemon.url)
-          return {
-            ...pokemon,
-            sprite: pokemonData.data.sprites.front_default?.toString() ?? null,
-          }
-        }),
-      )
-
-      setPokemonPool(pokemonsWithSprites)
-
       const count = getNumberOfPokemons(difficulty)
-      const chosenPokemons = pickRandom(pokemonsWithSprites, count)
+
+      const chosenPokemons = pickRandom(response.data.results, count)
+
+      pokemonPoolRef.current = response.data.results
 
       setPokemons(shuffleArray(chosenPokemons))
     }
@@ -72,10 +61,9 @@ function App() {
         color: 'red',
         autoClose: 3000,
       })
+      const newBestScore = Math.max(score, bestScore)
+      setBestScore(newBestScore)
       resetGame()
-      if (score > bestScore) {
-        setBestScore(score)
-      }
       return
     } else {
       if (score + 1 === pokemons.length) {
@@ -90,11 +78,11 @@ function App() {
     }
   }
 
-  const resetGame = (difficultyOverride) => {
-    const count = getNumberOfPokemons(difficultyOverride ?? difficulty)
+  const resetGame = () => {
+    const count = getNumberOfPokemons(difficulty)
     setScore(0)
     setClickedCards([])
-    setPokemons(shuffleArray(pickRandom(pokemonPool, count)))
+    setPokemons(shuffleArray(pickRandom(pokemonPoolRef.current, count)))
   }
 
   const handlePlayAgain = () => {
@@ -104,7 +92,10 @@ function App() {
 
   const handleDifficultyChange = (value) => {
     setDifficulty(value)
-    resetGame(value)
+    const count = getNumberOfPokemons(value)
+    setScore(0)
+    setClickedCards([])
+    setPokemons(shuffleArray(pickRandom(pokemonPoolRef.current, count)))
   }
 
   return (
@@ -136,7 +127,7 @@ function App() {
             <Text size='xl' fw={700} c='#f5c518' ta='center'>
               You Won!
             </Text>
-            <Text size='sm' c='dimmed' ta='center' c='gray.4'>
+            <Text size='sm' ta='center' c='gray.4'>
               You clicked each card only once!
             </Text>
             <Button
