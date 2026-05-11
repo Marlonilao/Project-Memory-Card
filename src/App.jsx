@@ -24,7 +24,9 @@ import {
   pickRandom,
   shuffleArray,
   getNumberOfPokemons,
+  capitalizeFirstLetter,
 } from './utils/helperFunctions'
+import useSound from 'use-sound'
 
 function App() {
   const [score, setScore] = useState(0)
@@ -35,6 +37,16 @@ function App() {
   const [difficulty, setDifficulty] = useState('Easy')
 
   const pokemonPoolRef = useRef([])
+
+  const [playGoodClick] = useSound('/up-chime-1.mp3', {
+    volume: 0.5,
+  })
+
+  const [playBadClick] = useSound('/dats-wrong.wav')
+
+  const [playGoodJob] = useSound('/good-job.wav', {
+    volume: 0.5,
+  })
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -56,22 +68,25 @@ function App() {
   const handleCardClick = (pokemon) => {
     if (clickedCards.includes(pokemon.name)) {
       notifications.show({
-        message: `Oops! You already clicked ${pokemon.name}!`,
+        message: `Oops! You already clicked ${capitalizeFirstLetter(pokemon.name)}!`,
         position: 'top-center',
         color: 'red',
         autoClose: 3000,
       })
       const newBestScore = Math.max(score, bestScore)
       setBestScore(newBestScore)
+      playBadClick()
       resetGame()
       return
     } else {
       if (score + 1 === pokemons.length) {
         setScore(score + 1)
         setBestScore(score + 1)
+        playGoodJob()
         open()
         return
       }
+      playGoodClick()
       setClickedCards([...clickedCards, pokemon.name])
       setScore(score + 1)
       setPokemons((prev) => shuffleArray(prev))

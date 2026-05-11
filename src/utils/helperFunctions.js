@@ -27,3 +27,8 @@ export const getNumberOfPokemons = (diff) => {
   const map = { Easy: 12, Medium: 18, Hard: 24 }
   return map[diff] ?? 12
 }
+
+export function capitalizeFirstLetter(str) {
+  if (!str) return str // Handle empty strings
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
