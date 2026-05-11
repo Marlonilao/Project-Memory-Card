@@ -44,20 +44,12 @@ function App() {
       const cached = localStorage.getItem('pokemons_')
 
       if (cached) {
-        pokemonsWithSprites = await Promise.all(
-          JSON.parse(cached).map(async (pokemon) => {
-            const pokemonData = await axios.get(pokemon.url)
-            return {
-              ...pokemon,
-              sprite: pokemonData.data.sprites.front_default.toString(),
-            }
-          }),
-        )
+        pokemonsWithSprites = JSON.parse(cached)
       } else {
         const response = await axios.get(
           'https://pokeapi.co/api/v2/pokemon/?limit=1350/',
         )
-        localStorage.setItem('pokemons_', JSON.stringify(response.data.results))
+
         pokemonsWithSprites = await Promise.all(
           response.data.results.map(async (pokemon) => {
             const pokemonData = await axios.get(pokemon.url)
@@ -67,6 +59,8 @@ function App() {
             }
           }),
         )
+
+        localStorage.setItem('pokemons_', JSON.stringify(pokemonsWithSprites))
       }
 
       setPokemonPool(pokemonsWithSprites)
@@ -76,6 +70,7 @@ function App() {
 
       setPokemons(shuffleArray(chosenPokemons))
     }
+
     fetchPokemons()
   }, [])
 
