@@ -39,7 +39,7 @@ function App() {
   useEffect(() => {
     const fetchPokemons = async () => {
       const response = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/?limit=1350/',
+        'https://pokeapi.co/api/v2/pokemon/?limit=898/',
       )
       const count = getNumberOfPokemons(difficulty)
 
@@ -91,6 +91,7 @@ function App() {
   }
 
   const handleDifficultyChange = (value) => {
+    if (value === difficulty) return
     setDifficulty(value)
     const count = getNumberOfPokemons(value)
     setScore(0)
