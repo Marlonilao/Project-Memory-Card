@@ -1,4 +1,4 @@
-import { Box, Text, Group } from '@mantine/core'
+import { Box, Text } from '@mantine/core'
 
 const Footer = () => {
   return (

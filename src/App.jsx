@@ -53,7 +53,7 @@ function App() {
       const response = await axios.get(
         'https://pokeapi.co/api/v2/pokemon/?limit=898/',
       )
-      const count = getNumberOfPokemons(difficulty)
+      const count = getNumberOfPokemons('Easy')
 
       const chosenPokemons = pickRandom(response.data.results, count)
 

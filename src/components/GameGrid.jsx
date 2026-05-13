@@ -15,7 +15,7 @@ const GameGrid = (props) => {
                 w='100%'
                 onClick={() => props.handleCardClick(pokemon)}
               >
-                <img src={sprite} alt={pokemon.name} />
+                <Image src={sprite} alt={pokemon.name} />
               </UnstyledButton>
             </Card>
           </Grid.Col>
