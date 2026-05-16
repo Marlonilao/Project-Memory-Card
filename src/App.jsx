@@ -10,13 +10,14 @@ import {
   Alert,
   Loader,
   Center,
+  Stack,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Header from './components/Header'
 import GameGrid from './components/GameGrid'
-import { IconInfoCircle } from '@tabler/icons-react'
+import { IconInfoCircle, IconWifiOff } from '@tabler/icons-react'
 import Footer from './components/Footer'
 import { notifications, Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
@@ -35,6 +36,7 @@ function App() {
   const [pokemons, setPokemons] = useState([])
   const [opened, { open, close }] = useDisclosure(false)
   const [difficulty, setDifficulty] = useState('Easy')
+  const [error, setError] = useState(null)
 
   const pokemonPoolRef = useRef([])
 
@@ -50,16 +52,42 @@ function App() {
 
   useEffect(() => {
     const fetchPokemons = async () => {
-      const response = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/?limit=898/',
-      )
-      const count = getNumberOfPokemons('Easy')
+      try {
+        const response = await axios.get(
+          'https://pokeapi.co/api/v2/pokemon/?limit=898/',
+        )
+        const count = getNumberOfPokemons('Easy')
+        const chosenPokemons = pickRandom(response.data.results, count)
 
-      const chosenPokemons = pickRandom(response.data.results, count)
-
-      pokemonPoolRef.current = response.data.results
-
-      setPokemons(shuffleArray(chosenPokemons))
+        pokemonPoolRef.current = response.data.results
+        setPokemons(shuffleArray(chosenPokemons))
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response) {
+            // Server responded with a non-2xx status
+            console.error(
+              'PokeAPI error:',
+              error.response.status,
+              error.response.data,
+            )
+            setError(
+              `Failed to load Pokémon data (${error.response.status}). Please try again later.`,
+            )
+          } else if (error.request) {
+            // Request was made but no response received (API is down / network issue)
+            console.error('No response from PokeAPI:', error.request)
+            setError(
+              'Could not reach the Pokémon API. Please check your connection or try again later.',
+            )
+          } else {
+            console.error('Request setup error:', error.message)
+            setError('Something went wrong while fetching Pokémon data.')
+          }
+        } else {
+          console.error('Unexpected error:', error)
+          setError('An unexpected error occurred.')
+        }
+      }
     }
 
     fetchPokemons()
@@ -183,7 +211,17 @@ function App() {
             </Text>
           </Alert>
           <>
-            {pokemons.length > 0 ? (
+            {error ? (
+              <Center mt='xl'>
+                <Stack align='center' gap='sm'>
+                  <IconWifiOff size={40} color='red' />{' '}
+                  {/* from @tabler/icons-react */}
+                  <Text c='red' ta='center'>
+                    {error}
+                  </Text>
+                </Stack>
+              </Center>
+            ) : pokemons.length > 0 ? (
               <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
             ) : (
               <Center mt='xl'>
