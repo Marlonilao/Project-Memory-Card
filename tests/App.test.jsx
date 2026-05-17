@@ -5,11 +5,7 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import {
-  mockPokemonsEasy,
-  mockPokemonsMedium,
-  mockPokemonsHard,
-} from './utils/mockPokemons'
+import { mockPokemonsEasy } from './utils/mockPokemons'
 import App from '../src/App'
 import axios from 'axios'
 
