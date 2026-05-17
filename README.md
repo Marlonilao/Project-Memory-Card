@@ -17,6 +17,8 @@ This project focuses on practicing core React concepts such as state management,
 - CSS
 - Mantine (UI Library)
 - PokéAPI
+- Vitest
+- React Testing Library
 
 ## Features
 
@@ -24,6 +26,11 @@ This project focuses on practicing core React concepts such as state management,
 - Score tracking
 - Best score tracking
 - Data fetching from an external API
+
+## Testing
+
+Component tests written with Vitest and React Testing Library covering
+loading, scoring, win/loss states, and error handling.
 
 ## Purpose
 
