@@ -189,9 +189,43 @@ describe('App Component', () => {
     })
     await user.click(playAgainButton)
 
+    await waitForElementToBeRemoved(() => screen.queryByText('You Won!'))
+
     expect(screen.getByText('Score: 0')).toBeInTheDocument()
 
     await user.click(screen.getByText('bulbasaur'))
     expect(screen.getByText('Score: 1')).toBeInTheDocument()
+  })
+
+  it('resets score when difficulty is changed', async () => {
+    axios.get.mockResolvedValue({
+      data: { results: mockPokemonsEasy },
+    })
+
+    render(<App />)
+
+    await waitForElementToBeRemoved(() => screen.getByTestId('loading-spinner'))
+
+    const user = userEvent.setup()
+
+    await user.click(screen.getByText('bulbasaur'))
+    expect(screen.getByText('Score: 1')).toBeInTheDocument()
+
+    const difficultySelect = screen.getByRole('combobox')
+    await user.selectOptions(difficultySelect, 'Medium')
+
+    expect(screen.getByText('Score: 0')).toBeInTheDocument()
+  })
+
+  it('shows error message when pokemon data fails to load', async () => {
+    axios.get.mockRejectedValue(new Error('Network Error'))
+
+    render(<App />)
+
+    await waitForElementToBeRemoved(() => screen.getByTestId('loading-spinner'))
+
+    expect(
+      screen.getByText('Failed to load Pokémon data. Please try again later.'),
+    ).toBeInTheDocument()
   })
 })

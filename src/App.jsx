@@ -61,31 +61,8 @@ function App() {
         pokemonPoolRef.current = response.data.results
         setPokemons(shuffleArray(chosenPokemons))
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            // Server responded with a non-2xx status
-            console.error(
-              'PokeAPI error:',
-              error.response.status,
-              error.response.data,
-            )
-            setError(
-              `Failed to load Pokémon data (${error.response.status}). Please try again later.`,
-            )
-          } else if (error.request) {
-            // Request was made but no response received (API is down / network issue)
-            console.error('No response from PokeAPI:', error.request)
-            setError(
-              'Could not reach the Pokémon API. Please check your connection or try again later.',
-            )
-          } else {
-            console.error('Request setup error:', error.message)
-            setError('Something went wrong while fetching Pokémon data.')
-          }
-        } else {
-          console.error('Unexpected error:', error)
-          setError('An unexpected error occurred.')
-        }
+        console.error('Failed to fetch Pokémon data:', error)
+        setError('Failed to load Pokémon data. Please try again later.')
       }
     }
 
