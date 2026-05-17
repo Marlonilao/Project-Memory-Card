@@ -10,7 +10,6 @@ import {
   Alert,
   Loader,
   Center,
-  Stack,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useState, useEffect, useRef } from 'react'
@@ -225,7 +224,7 @@ function App() {
               <GameGrid pokemons={pokemons} handleCardClick={handleCardClick} />
             ) : (
               <Center mt='xl'>
-                <Loader color='#f5c518' />
+                <Loader data-testid='loading-spinner' color='#f5c518' />
               </Center>
             )}
           </>
